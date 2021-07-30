@@ -10,34 +10,34 @@
 
     <script type="text/javascript">
 
-        // function addNewProduct(){
-        //     let name = $('#name').val();
-        //     let price = $('#price').val();
-        //     let quantity = $('#quantity').val();
-        //     let color = $('#color').val();
-        //     let description = $('#description').val();
-        //     let category = $('#category').val();
-        //     let newProduct = {
-        //         name: name,
-        //         price: price,
-        //         quantity: quantity,
-        //         color: color,
-        //         description: description,
-        //         category: category
-        //     };
-        //
-        //     $.ajax({
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         type: "POST",
-        //         data: JSON.stringify(newProduct),
-        //         url: "/products",
-        //         success: findAll
-        //     });
-        //     event.preventDefault();
-        // };
+        function addNewProduct(){
+            let name = $('#name').val();
+            let price = $('#price').val();
+            let quantity = $('#quantity').val();
+            let color = $('#color').val();
+            let description = $('#description').val();
+            let category = $('#category').val();
+            let newProduct = {
+                name: name,
+                price: price,
+                quantity: quantity,
+                color: color,
+                description: description,
+                category: { id: category}
+            };
+
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                data: JSON.stringify(newProduct),
+                url: "/products",
+                success: findAll
+            });
+            event.preventDefault();
+        };
 
         function findAll(){
             $.ajax({
@@ -100,9 +100,9 @@
                         "        </tr>\n" +
                         "        <tr>\n" +
                         "            <td>Category:</td>\n" +
-                        "            <td><select> " ;
+                        "            <td><select id='category'> " ;
                     for (let i = 0; i < data.length; i++) {
-                        str += "<option value='"+data[i].id+"' > "+ data[i].name +"</option>>"
+                        str += "<option value='"+data[i].id+"'>"+data[i].name+"</option>"
                     }
                     str += "</select>";
                     str +=
@@ -110,21 +110,15 @@
                         "        </tr>\n" +
                         "        <tr>\n" +
                         "            <td></td>\n" +
-                        "            <td><input type=\"submit\" value=\"Add\" onclick=\"addNewProduct()\"></td>\n" +
+                        "            <td><button type=\"button\" onclick=\"addNewProduct()\">SAVE</button></td>\n" +
                         "        </tr>\n" +
                         "    </table>\n" +
                         "</form>";
                     document.getElementById('main').innerHTML = str;
                 }
             })
-
-
-
-
-
-
-
         }
+
 
     </script>
 
@@ -155,6 +149,8 @@
 </div>
 
 </body>
+<select name="" id="">
 
+</select>
 
 </html>

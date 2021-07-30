@@ -28,11 +28,11 @@ public class ProductController {
     }
 
 
-//    @PostMapping
-//    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-//        productService.save(product);
-//        return new ResponseEntity<>( HttpStatus.CREATED);
-//    }
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        productService.save(product);
+        return new ResponseEntity<>( HttpStatus.CREATED);
+    }
 
 
     @GetMapping
@@ -45,23 +45,23 @@ public class ProductController {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
 
-//    @DeleteMapping
-//    public ResponseEntity<Product> deleteProduct(@RequestBody Long id) {
-//        productService.remove(id);
-//        return new ResponseEntity<>( HttpStatus.NO_CONTENT);
-//    }
+    @DeleteMapping
+    public ResponseEntity<Product> deleteProduct(@RequestBody Long id) {
+        productService.remove(id);
+        return new ResponseEntity<>( HttpStatus.NO_CONTENT);
+    }
 
-//    @PutMapping
-//    public ResponseEntity<Product> products(@RequestBody Long id) {
-//        Product product = productService.findById(id).get();
-//        return new ResponseEntity<>(product, HttpStatus.OK);
-//    }
+    @PutMapping
+    public ResponseEntity<Product> products(@RequestBody Long id) {
+        Product product = productService.findById(id).get();
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
 
-//    @PostMapping("/update")
-//    public ResponseEntity<Product> update(@RequestBody Product product){
-//        productService.save(product);
-//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-//    }
+    @PostMapping("/update")
+    public ResponseEntity<Product> update(@RequestBody Product product){
+        productService.save(product);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 
 
 }
