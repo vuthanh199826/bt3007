@@ -63,7 +63,7 @@
 
         function getProduct(product) {
             return `<tr><td >${product.name}</td><td>${product.price}</td><td >${product.quantity}</td><td>${product.color}</td><td>${product.description}</td><td>${product.category.name}</td>` +
-                `<td><a onclick="" >Delete</a></td></tr>`;
+                `<td><a class="btn btn-danger" onclick="deleteProduct(${product.id})" >Delete</a></td><td><a class="btn btn-warning" onclick="edit(${product.id})" >Edit</a></td></tr>`;
         }
 
         function showFormCreate(){
@@ -110,12 +110,85 @@
                         "        </tr>\n" +
                         "        <tr>\n" +
                         "            <td></td>\n" +
-                        "            <td><button type=\"button\" onclick=\"addNewProduct()\">SAVE</button></td>\n" +
+                        "            <td><button class='btn btn-success' type=\"button\" onclick=\"addNewProduct()\">SAVE</button></td>\n" +
                         "        </tr>\n" +
                         "    </table>\n" +
                         "</form>";
                     document.getElementById('main').innerHTML = str;
+                    document.getElementById("create").innerHTML = "";
                 }
+            })
+        }
+
+
+        function deleteProduct(id){
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "DELETE",
+                data: JSON.stringify(id),
+                url: "/products",
+                success:findAll
+            })
+
+        }
+
+        function edit(id){
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "PUT",
+                data: JSON.stringify(id),
+                url: "/products",
+                success: function (data){
+
+                    let str = "";
+                    str += "<tr" +
+                        "><td>Name</td><td><input id='newProducer' type='text' value='"+data.name+"'></td>" +
+                        "</tr>" +
+                        "<tr><td>Price</td><td><input id='newModel' type='text' value='"+data.price+"'></td></tr>" +
+                        "<tr><td>Quantity</td><td><input id='newPrice' type='text' value='"+data.quantity+"'></td></tr>" +
+                        "<tr><td>Color</td><td><input id='newPrice' type='text' value='"+data.color+"'></td></tr>" +
+                        "<tr><td>Description</td><td><input id='newPrice' type='text' value='"+data.description+"'></td></tr>" +
+                        "<tr><td>ID</td><td><input id='newID' type='hidden' value='"+data.id+"'></td></tr>" +
+                        "<tr><td>Category</td><td><input id='newPrice' type='text' value='"+data.category.id+"'></td></tr>" +
+                        "<button type='button' onclick='update()'>Update</button>"
+                    document.getElementById("smartphoneList").innerHTML = str;
+                }
+            })
+        }
+
+
+        function update(){
+            let name = $('#name').val();
+            let price = $('#price').val();
+            let quantity = $('#quantity').val();
+            let color = $('#color').val();
+            let description = $('#description').val();
+            let category = $('#category').val();
+            let newProduct = {
+                name: name,
+                price: price,
+                quantity: quantity,
+                color: color,
+                description: description,
+                category: { id: category}
+            };
+
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                data: JSON.stringify(newProduct),
+                url: "/smartphones/update",
+                success: findAll
+
             })
         }
 
