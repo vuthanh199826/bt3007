@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        // function addNewProduct(){
+        //     let name = $('#name').val();
+        //     let price = $('#price').val();
+        //     let quantity = $('#quantity').val();
+        //     let color = $('#color').val();
+        //     let description = $('#description').val();
+        //     let category = $('#category').val();
+        //     let newProduct = {
+        //         name: name,
+        //         price: price,
+        //         quantity: quantity,
+        //         color: color,
+        //         description: description,
+        //         category: category
+        //     };
+        //
+        //     $.ajax({
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json'
+        //         },
+        //         type: "POST",
+        //         data: JSON.stringify(newProduct),
+        //         url: "/products",
+        //         success: findAll
+        //     });
+        //     event.preventDefault();
+        // };
+
+        function findAll(){
+            $.ajax({
+                type: "GET",
+                url: "/products",
+                success: function (data) {
+                    let content = '   <table><tr>\n' +
+                        '        <td>Name</td>\n' +
+                        '        <td>Price</td>\n' +
+                        '        <td>Quantity</td>\n' +
+                        '        <td>Color</td>\n' +
+                        '        <td>Description</td>\n' +
+                        '        <td>Category</td>\n' +
+                        '    </tr>';
+                    for (let i = 0; i < data.length; i++) {
+                        content += getProduct(data[i]);
+                    }
+                    content += "</table>";
+                    document.getElementById('main').innerHTML = content;
+                }
+            });
+        }
+
+        function getProduct(product) {
+            return `<tr><td >${product.name}</td><td>${product.price}</td><td >${product.quantity}</td><td>${product.color}</td><td>${product.description}</td><td>${product.category.name}</td>` +
+                `<td><a onclick="" >Delete</a></td></tr>`;
+        }
+
+        function showFormCreate(){
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "GET",
+                url: "/products/create",
+                success: function (data){
+                    let str = "";
+                    str += "<form id=\"add-product\">\n" +
+                        "    <table>\n" +
+                        "        <tr>\n" +
+                        "            <td>Name:</td>\n" +
+                        "            <td><input type=\"text\" id=\"name\" placeholder=\"name\"></td>\n" +
+                        "        </tr>\n" +
+                        "        <tr>\n" +
+                        "            <td>Price:</td>\n" +
+                        "            <td><input type=\"text\" id=\"price\" placeholder=\"price\"></td>\n" +
+                        "        </tr>\n" +
+                        "        <tr>\n" +
+                        "            <td>Quantity:</td>\n" +
+                        "            <td><input type=\"text\" id=\"quantity\" placeholder=\"quantity\"></td>\n" +
+                        "        </tr>\n" +
+                        "        <tr>\n" +
+                        "            <td>Color:</td>\n" +
+                        "            <td><input type=\"text\" id=\"color\" placeholder=\"color\"></td>\n" +
+                        "        </tr>\n" +
+                        "        <tr>\n" +
+                        "            <td>Description:</td>\n" +
+                        "            <td><input type=\"text\" id=\"description\" placeholder=\"description\"></td>\n" +
+                        "        </tr>\n" +
+                        "        <tr>\n" +
+                        "            <td>Category:</td>\n" +
+                        "            <td><select> " ;
+                    for (let i = 0; i < data.length; i++) {
+                        str += "<option value='"+data[i].id+"' > "+ data[i].name +"</option>>"
+                    }
+                    str += "</select>";
+                    str +=
+                        " </td>\n" +
+                        "        </tr>\n" +
+                        "        <tr>\n" +
+                        "            <td></td>\n" +
+                        "            <td><input type=\"submit\" value=\"Add\" onclick=\"addNewProduct()\"></td>\n" +
+                        "        </tr>\n" +
+                        "    </table>\n" +
+                        "</form>";
+                    document.getElementById('main').innerHTML = str;
+                }
+            })
+
+
+
+
+
+
+
+        }
+
+    </script>
+
+</head>
+<body onload="findAll()">
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <div id="create">
+                <button class="btn btn-success" onclick="showFormCreate()" type="button">AddNewProduct</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            //main
+            <div id="main"></div>
+        </div>
+    </div>
+
+    <div class="row"></div>
+
+</div>
+
+</body>
+
+
+</html>
