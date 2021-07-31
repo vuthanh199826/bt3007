@@ -64,6 +64,13 @@ public class ProductController {
     }
 
 
+    @PostMapping("/search")
+    public ResponseEntity<Iterable<Product>> search(@RequestParam String category){
+        Iterable<Product> products = productService.findByCategory(category);
+        return new ResponseEntity<>(products,HttpStatus.OK);
+    }
+
+
 
 
 }

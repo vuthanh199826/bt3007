@@ -13,5 +13,7 @@ public interface IProductService {
 
     void remove(Long id);
 
+    Iterable<Product> findByCategory(String category);
+
 
 }

@@ -118,23 +118,27 @@
                         "    </table>\n" +
                         "</form>";
                     document.getElementById('main').innerHTML = str;
-                    document.getElementById("create").innerHTML = "";
+                    // document.getElementById("create").innerHTML = "";
                 }
             })
         }
 
 
         function deleteProduct(id) {
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                type: "DELETE",
-                data: JSON.stringify(id),
-                url: "/products",
-                success: findAll
-            })
+
+            let check = confirm("Are you sure to delete ??? ");
+            if(check == true){
+                $.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    type: "DELETE",
+                    data: JSON.stringify(id),
+                    url: "/products",
+                    success: findAll
+                })
+            }
 
         }
 
@@ -148,7 +152,6 @@
                 data: JSON.stringify(id),
                 url: "/products",
                 success: function (data) {
-
                     let str = "<table class='table table striped'>";
                     str += "<tr" +
                         "><td>Name</td><td><input id='name' type='text' value='" + data.name + "'></td>" +
@@ -160,15 +163,12 @@
                         "<input id='id' type='hidden' value='" + data.id + "'>" +
                         "<tr><td>Category</td><td><select id='category'></div>" +
                         "</select></td></tr>"
-                    getCategory();
-                    str +=
-                        "<tr><td><button class='btn btn-success' type='button' onclick='update()'>Update</button></td></tr></table>"
-
+                         getCategory();
+                    str +="<tr><td><button class='btn btn-success' type='button' onclick='update()'>Update</button></td></tr></table>"
                     document.getElementById("main").innerHTML = str;
                 }
             })
-        }
-
+        };
         function getCategory() {
             $.ajax({
                 headers: {
@@ -178,14 +178,10 @@
                 type: "GET",
                 url: "/products/create",
                 success: function (data) {
-
                     let str = "";
-                    ;
                     for (let i = 0; i < data.length; i++) {
                         str += "<option value='" + data[i].id + "'>" + data[i].name + "</option>"
                     }
-
-
                     document.getElementById("category").innerHTML = str;
                 }
             })
@@ -218,8 +214,35 @@
                 data: JSON.stringify(newProduct),
                 url: "/products/update",
                 success: findAll
-
             })
+        }
+
+        function search(){
+            let category = $('#search').val();
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                data: JSON.stringify(category),
+                url: "/products/search?category="+category,
+                success: function (data){
+                    console.log(data);
+                    if(data.length==0){
+                        alert(category + " is undefine!!");
+                    }else {
+                        let str = "<table class='table table-striped'>";
+                        for(let i =0; i< data.length; i++){
+                            str += getProduct(data[i]);
+                        }
+                        str += "</table>";
+                        document.getElementById("main").innerHTML = str;
+                    }
+
+                }
+            })
+
         }
 
 
@@ -232,12 +255,16 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-12">
+        <div class="col-4">
             <div id="create">
                 <button class="btn btn-success" onclick="showFormCreate()" type="button">AddNewProduct</button>
             </div>
 
         </div>
+        <div class="col-4">
+            <button class="btn btn-primary" type="button" onclick="search()">Search</button>
+            <input id="search" type="text"></div>
+        <div class="col-4"><button class="btn btn-primary" onclick="findAll()">HOME</button></div>
     </div>
 
     <div class="row">
