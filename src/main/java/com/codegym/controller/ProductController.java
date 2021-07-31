@@ -5,7 +5,10 @@ import com.codegym.model.Category;
 import com.codegym.model.Product;
 import com.codegym.service.category.ICategoryService;
 import com.codegym.service.product.IProductService;
+import org.hibernate.engine.jdbc.Size;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +39,8 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<Iterable<Product>> allProduct() {
-        return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Product>> allProduct(Pageable pageable) {
+        return new ResponseEntity<>(productService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/create")

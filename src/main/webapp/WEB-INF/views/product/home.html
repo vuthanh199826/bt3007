@@ -46,22 +46,66 @@
             $.ajax({
                 type: "GET",
                 url: "/products",
-                success: function (data) {
-                    let content = '   <table class="table table-striped"><tr>\n' +
-                        '        <td>Name</td>\n' +
-                        '        <td>Price</td>\n' +
-                        '        <td>Quantity</td>\n' +
-                        '        <td>Color</td>\n' +
-                        '        <td>Description</td>\n' +
-                        '        <td>Category</td>\n' +
-                        '    </tr>';
-                    for (let i = 0; i < data.length; i++) {
-                        content += getProduct(data[i]);
-                    }
-                    content += "</table>";
-                    document.getElementById('main').innerHTML = content;
+                success: function (data){
+                    getDataPage(data);
                 }
             });
+        }
+
+        function next(page){
+            let x = page + 1;
+            $.ajax({
+                type: "GET",
+                url: "/products?page="+x,
+                success: function (data){
+                    getDataPage(data);
+                }
+            })
+        }
+
+        function previous(page){
+            let x = page - 1;
+            $.ajax({
+                type: "GET",
+                url: "/products?page="+x,
+                success: function (data){
+                    getDataPage(data);
+                }
+            })
+        }
+
+        function getDataPage(data){
+            let content = '   <table class="table table-striped"><tr>\n' +
+                '        <td>Name</td>\n' +
+                '        <td>Price</td>\n' +
+                '        <td>Quantity</td>\n' +
+                '        <td>Color</td>\n' +
+                '        <td>Description</td>\n' +
+                '        <td>Category</td>\n' +
+                '    </tr>';
+            for (let i = 0; i < data.content.length; i++) {
+                content += getProduct(data.content[i]);
+            }
+            content += "</table>";
+            document.getElementById('main').innerHTML = content;
+
+            let page = data.pageable.pageNumber;
+            let pageShow = page + 1;
+            let str = "";
+            if(data.first && !data.last ){
+                str += "<button class=\"btn btn-primary\" onclick=\"next("+page+")\">Next</button>";
+                str += "<button class=\"btn btn-primary\" >"+pageShow+"</button>";
+                document.getElementById("page").innerHTML = str;
+            }else if(data.last && !data.first){
+                str += "<button class=\"btn btn-primary\" >"+pageShow+"</button>";
+                str += "<button class=\"btn btn-primary\" onclick=\"previous("+page+")\">Previous</button>";
+                document.getElementById("page").innerHTML = str;
+            }else {
+                str += "<button class=\"btn btn-primary\" onclick=\"previous("+page+")\">Previous</button>";
+                str += "<button class=\"btn btn-primary\" >"+pageShow+"</button>";
+                str += "<button class=\"btn btn-primary\" onclick=\"next("+page+")\">Next</button>";
+                document.getElementById("page").innerHTML = str;
+            }
         }
 
         function getProduct(product) {
@@ -263,13 +307,16 @@
         </div>
         <div class="col-4">
             <button class="btn btn-primary" type="button" onclick="search()">Search</button>
-            <input id="search" type="text"></div>
+            <input class="page-information" id="search" type="text"></div>
         <div class="col-4"><button class="btn btn-primary" onclick="findAll()">HOME</button></div>
     </div>
 
     <div class="row">
         <div class="col-12">
             //main
+            <div id="page"><div>
+
+            </div></div>
             <div id="main"></div>
         </div>
     </div>
